@@ -1,13 +1,14 @@
 import { FlatList, TextStyle, View, Text, ViewStyle } from 'react-native';
 import { Place } from '../../models/Place';
 import { PlaceItem } from './PlaceItem';
+import { AppColors } from '../../theme/AppColors';
 
 export const PlacesList = ({ places }: { places?: Place[] }) => {
   if (!places || places.length < 1)
     return (
       <View style={$fallBackContainer}>
         <Text style={$fallbackText}>
-          No places added yet - start adding some
+          No places added yet - start adding some!
         </Text>
       </View>
     );
@@ -31,4 +32,5 @@ const $fallBackContainer: ViewStyle = {
 
 const $fallbackText: TextStyle = {
   fontSize: 16,
+  color: AppColors.primary400,
 };

@@ -14,7 +14,6 @@ export const IconButton = ({ icon, size, color, onPress }: IconButtonProps) => {
 
 const $button: ViewStyle = {
   padding: 8,
-  margin: 5,
   justifyContent: 'center',
   alignItems: 'center',
 };

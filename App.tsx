@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AllPlaces } from './screens/AllPlaces';
 import { AddPlace } from './screens/AddPlace';
 import { IconButton } from './components/UI/IconButton';
+import { AppColors } from './theme/AppColors';
 
 type RootScreens = {
   AddPlace: undefined;
@@ -20,7 +21,17 @@ export default function App() {
     <>
       <StatusBar style="dark" />
       <NavigationContainer>
-        <RootStack.Navigator>
+        <RootStack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: AppColors.primary500,
+            },
+            headerTintColor: AppColors.gray700,
+            contentStyle: {
+              backgroundColor: AppColors.gray700,
+            },
+          }}
+        >
           <RootStack.Screen
             name="AllPlaces"
             component={AllPlaces}
@@ -29,6 +40,7 @@ export default function App() {
             }: {
               navigation: NavigationProp<RootScreens>;
             }) => ({
+              title: 'Your Favorite Places',
               headerRight: ({ tintColor }) => {
                 return (
                   <IconButton
@@ -41,7 +53,11 @@ export default function App() {
               },
             })}
           />
-          <RootStack.Screen name="AddPlace" component={AddPlace} />
+          <RootStack.Screen
+            name="AddPlace"
+            component={AddPlace}
+            options={{ title: 'Add your place' }}
+          />
         </RootStack.Navigator>
       </NavigationContainer>
     </>
