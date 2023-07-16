@@ -1,24 +1,44 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Button, Image, Pressable, View } from 'react-native';
+import { Alert, Button, Image, Pressable, View } from 'react-native';
 import { AppColors } from '../../theme/AppColors';
 
 export const ImagePickerElement = () => {
   const [image, setImage] = useState('');
-  const [status, requestPermission] = ImagePicker.useCameraPermissions();
+  const [existingPermission, requestPermission] =
+    ImagePicker.useCameraPermissions();
 
-  const verifyPermissions = async () => {};
-  const takeImageHandler = async () => {
-    const { status } = await requestPermission();
-    if (status !== 'granted') {
-      console.log('Camera permission not granted');
-      return;
+  const verifyPermissions = async () => {
+    if (
+      existingPermission?.status === ImagePicker.PermissionStatus.UNDETERMINED
+    ) {
+      const permissionStatus = await requestPermission();
+      if (!permissionStatus.granted) {
+        console.log('Camera permission not granted');
+        return;
+      }
+
+      return permissionStatus.granted;
+    }
+    if (existingPermission?.status === ImagePicker.PermissionStatus.DENIED) {
+      Alert.alert(
+        'Insufficient Permissions!',
+        'You need to grant camera permissions to use this app.'
+      );
+      return false;
     }
 
-    console.log('status is', status);
+    return true;
+  };
+  const takeImageHandler = async () => {
+    // }
+
+    const hasPermission = await verifyPermissions();
+    // console.log('status is', status);
     // const response = await requestPermission();
     // console.log(response)
     // if (!status || !status.granted) return;
+    if (!hasPermission) return;
     try {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -57,7 +77,9 @@ export const ImagePickerElement = () => {
       <Button onPress={takeImageHandler} title="Pick an image" />
       {/* style={{backgroundColor: AppColors.primary500}} /> */}
       {image && (
-        <View style={{ borderWidth: 5, borderColor: AppColors.gray700, margin: 15}}>
+        <View
+          style={{ borderWidth: 5, borderColor: AppColors.gray700, margin: 15 }}
+        >
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
         </View>
       )}
