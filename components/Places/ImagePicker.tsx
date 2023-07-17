@@ -1,44 +1,17 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Alert, Button, Image, Pressable, View } from 'react-native';
+import { Alert, Button, Image, Pressable, View, Text } from 'react-native';
 import { AppColors } from '../../theme/AppColors';
 
 export const ImagePickerElement = () => {
-  const [image, setImage] = useState('');
-  const [existingPermission, requestPermission] =
+  const [imagePreview, setImage] = useState('');
+  const [existentPermission, requestPermission] =
     ImagePicker.useCameraPermissions();
 
-  const verifyPermissions = async () => {
-    if (
-      existingPermission?.status === ImagePicker.PermissionStatus.UNDETERMINED
-    ) {
-      const permissionStatus = await requestPermission();
-      if (!permissionStatus.granted) {
-        console.log('Camera permission not granted');
-        return;
-      }
-
-      return permissionStatus.granted;
-    }
-    if (existingPermission?.status === ImagePicker.PermissionStatus.DENIED) {
-      Alert.alert(
-        'Insufficient Permissions!',
-        'You need to grant camera permissions to use this app.'
-      );
-      return false;
-    }
-
-    return true;
-  };
   const takeImageHandler = async () => {
-    // }
-
     const hasPermission = await verifyPermissions();
-    // console.log('status is', status);
-    // const response = await requestPermission();
-    // console.log(response)
-    // if (!status || !status.granted) return;
     if (!hasPermission) return;
+
     try {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -55,34 +28,63 @@ export const ImagePickerElement = () => {
     } catch (error) {
       console.log('Error launching camera:', error);
     }
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.All,
-    //   allowsEditing: true,
-    //   aspect: [4, 3],
-    //   quality: 1,
-    // });
-
-    // console.log(result);
-
-    // if (!result.canceled) setImage(result.assets[0].uri);
   };
+
+  const verifyPermissions = async () => {
+    const isPermissionUndetermined =
+      existentPermission?.status === ImagePicker.PermissionStatus.UNDETERMINED;
+    if (isPermissionUndetermined) {
+      const permissionResponse = await requestPermission();
+      if (!permissionResponse.granted) {
+        console.log('Camera permission not granted');
+        return;
+      }
+
+      return permissionResponse.granted;
+    }
+
+    const isPermissionDenied =
+      existentPermission?.status === ImagePicker.PermissionStatus.DENIED;
+    if (isPermissionDenied) {
+      Alert.alert(
+        'Insufficient Permissions!',
+        'You need to grant camera permissions to use this app.'
+      );
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: AppColors.primary500,
-        alignItems: 'center',
+        gap: 10,
       }}
     >
+      <View
+        style={{
+          borderRadius: 3,
+          width: '100%',
+          aspectRatio: 2,
+          backgroundColor: AppColors.primary100,
+          justifyContent: 'center',
+        }}
+      >
+        {imagePreview ? (
+          <Image
+            source={{ uri: imagePreview }}
+            style={{ width: '100%', height: '100%' }}
+          />
+        ) : (
+          <Text style={{ textAlign: 'center', fontSize: 16 }}>
+            No image taken yet.
+          </Text>
+        )}
+      </View>
       <Button onPress={takeImageHandler} title="Pick an image" />
       {/* style={{backgroundColor: AppColors.primary500}} /> */}
-      {image && (
-        <View
-          style={{ borderWidth: 5, borderColor: AppColors.gray700, margin: 15 }}
-        >
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-        </View>
-      )}
     </View>
   );
 };

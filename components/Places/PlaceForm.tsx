@@ -51,6 +51,6 @@ const $input: TextStyle = {
   fontSize: 16,
   borderBottomColor: AppColors.primary700,
   borderBottomWidth: 2,
-  borderRadius: 4,
+  borderRadius: 3,
   backgroundColor: AppColors.primary100,
 };
