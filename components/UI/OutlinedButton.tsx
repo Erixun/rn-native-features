@@ -12,7 +12,7 @@ export const OutlinedButton = ({
       onPress={onPress}
       style={({ pressed }) => [$button, pressed && $pressed]}
     >
-      <Ionicons name={icon} style={$icon} />
+      <Ionicons name={icon} style={$icon} size={16} />
       <Text style={$text}>{children}</Text>
     </Pressable>
   );
@@ -31,7 +31,7 @@ const $button: ViewStyle = {
 
 const $pressed: ViewStyle = { opacity: 0.7 };
 
-const $icon: ViewStyle = { marginRight: 6 };
+const $icon: TextStyle = { marginRight: 6, marginBottom: -1, color: AppColors.primary500 };
 
 const $text: TextStyle = { color: AppColors.primary500 };
 
