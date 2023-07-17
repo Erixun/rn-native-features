@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { AppColors } from '../../theme/AppColors';
 import { ImagePickerElement } from './ImagePicker';
+import { LocationPicker } from './LocationPicker';
 
 export const PlaceForm = () => {
   const [enteredTitle, setEnteredTitle] = useState('');
@@ -26,8 +27,8 @@ export const PlaceForm = () => {
           value={enteredTitle}
         />
         <ImagePickerElement />
+        <LocationPicker />
       </View>
-
     </ScrollView>
   );
 };
