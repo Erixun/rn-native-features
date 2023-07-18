@@ -6,9 +6,11 @@ import { AllPlaces } from './screens/AllPlaces';
 import { AddPlace } from './screens/AddPlace';
 import { IconButton } from './components/UI/IconButton';
 import { AppColors } from './theme/AppColors';
+import { Map } from './screens/Map';
+import { LatLng } from 'react-native-maps';
 
-type RootScreens = {
-  AddPlace: undefined;
+export type RootScreens = {
+  AddPlace: undefined | { pickedLocation: LatLng };
   AllPlaces: undefined;
   Map: undefined;
   PlaceDetails: undefined;
@@ -58,6 +60,7 @@ export default function App() {
             component={AddPlace}
             options={{ title: 'Add your place' }}
           />
+          <RootStack.Screen name="Map" component={Map} />
         </RootStack.Navigator>
       </NavigationContainer>
     </>

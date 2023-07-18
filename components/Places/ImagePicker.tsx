@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Alert, Image, View, Text, ViewStyle } from 'react-native';
+import { Alert, Image, View, Text, ViewStyle, TextStyle } from 'react-native';
 import { AppColors } from '../../theme/AppColors';
 import { OutlinedButton } from '../UI/OutlinedButton';
 
@@ -61,7 +61,7 @@ export const ImagePickerElement = () => {
     <View
       style={{
         flex: 1,
-        gap: 10,
+        gap: 5,
       }}
     >
       <View style={$previewArea}>
@@ -71,9 +71,7 @@ export const ImagePickerElement = () => {
             style={{ width: '100%', height: '100%' }}
           />
         ) : (
-          <Text style={{ textAlign: 'center', fontSize: 16 }}>
-            No image taken yet.
-          </Text>
+          <Text style={$previewText}>No image taken yet.</Text>
         )}
       </View>
       <OutlinedButton onPress={takeImageHandler} icon={'camera'}>
@@ -89,4 +87,7 @@ export const $previewArea: ViewStyle = {
   aspectRatio: 2,
   backgroundColor: AppColors.primary100,
   justifyContent: 'center',
+  overflow: 'hidden'
 };
+
+export const $previewText: TextStyle = { textAlign: 'center', fontSize: 16 };

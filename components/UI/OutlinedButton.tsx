@@ -22,6 +22,7 @@ const $button: ViewStyle = {
   paddingHorizontal: 12,
   paddingVertical: 6,
   margin: 4,
+  marginBottom: 16,
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',

@@ -10,8 +10,9 @@ import {
 import { AppColors } from '../../theme/AppColors';
 import { ImagePickerElement } from './ImagePicker';
 import { LocationPicker } from './LocationPicker';
+import { LatLng } from 'react-native-maps';
 
-export const PlaceForm = () => {
+export const PlaceForm = ({ pickedLocation }: { pickedLocation?: LatLng }) => {
   const [enteredTitle, setEnteredTitle] = useState('');
 
   const changeTitleHandler = (enteredText: string) => {
@@ -27,7 +28,7 @@ export const PlaceForm = () => {
           value={enteredTitle}
         />
         <ImagePickerElement />
-        <LocationPicker />
+        <LocationPicker alreadyPickedLocation={pickedLocation} />
       </View>
     </ScrollView>
   );
