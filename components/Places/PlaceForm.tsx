@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   ScrollView,
   TextInput,
@@ -11,13 +11,32 @@ import { AppColors } from '../../theme/AppColors';
 import { ImagePickerElement } from './ImagePicker';
 import { LocationPicker } from './LocationPicker';
 import { LatLng } from 'react-native-maps';
+import { Button } from '../UI/Button';
 
 export const PlaceForm = ({ pickedLocation }: { pickedLocation?: LatLng }) => {
-  const [enteredTitle, setEnteredTitle] = useState('');
+  const [enteredTitle, setEnteredTitle] = useState<string>();
+  const [formImage, setFormImage] = useState<string>();
+  const [formLocation, setFormLocation] = useState<LatLng>();
 
   const changeTitleHandler = (enteredText: string) => {
     setEnteredTitle(enteredText);
   };
+
+  const takeImageHandler = (uri: string) => {
+    setFormImage(uri);
+  };
+
+  const pickLocationHandler = useCallback((location: LatLng) => {
+    setFormLocation(location);
+  }, []); //useCallback ensures that the func isnt recreated unecessarily when passed as prop
+  //otherwise this func will be reacreated whenever this (PlaceForm) component is rerendered.
+  const savePlaceHandler = () => {
+    console.log('Form content:')
+    console.log(enteredTitle);
+    console.log(formImage);
+    console.log(formLocation);
+  };
+
   return (
     <ScrollView>
       <View style={$form}>
@@ -27,8 +46,12 @@ export const PlaceForm = ({ pickedLocation }: { pickedLocation?: LatLng }) => {
           onChangeText={changeTitleHandler}
           value={enteredTitle}
         />
-        <ImagePickerElement />
-        <LocationPicker alreadyPickedLocation={pickedLocation} />
+        <ImagePickerElement onTakeImage={takeImageHandler} />
+        <LocationPicker
+          alreadyPickedLocation={pickedLocation}
+          onPickLocation={pickLocationHandler}
+        />
+        <Button onPress={savePlaceHandler}>Save Place</Button>
       </View>
     </ScrollView>
   );

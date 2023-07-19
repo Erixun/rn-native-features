@@ -4,11 +4,11 @@ import { Alert, Image, View, Text, ViewStyle, TextStyle } from 'react-native';
 import { AppColors } from '../../theme/AppColors';
 import { OutlinedButton } from '../UI/OutlinedButton';
 
-export const ImagePickerElement = () => {
+export const ImagePickerElement = ({ onTakeImage }: ImagePickerProps) => {
   const [imagePreview, setImage] = useState('');
   const [existentPermission, requestPermission] =
-    ImagePicker.useCameraPermissions();
-
+  ImagePicker.useCameraPermissions();
+  
   const takeImageHandler = async () => {
     const hasPermission = await verifyPermissions();
     if (!hasPermission) return;
@@ -21,56 +21,58 @@ export const ImagePickerElement = () => {
         quality: 0.5,
       });
       console.log(result);
-
+      
       if (!result.canceled) {
-        console.log(result.assets);
-        setImage(result.assets[0].uri);
+        // console.log(result.assets);
+        const { uri } = result.assets[0];
+        setImage(uri);
+        onTakeImage(uri);
       }
     } catch (error) {
       console.log('Error launching camera:', error);
     }
   };
-
+  
   const verifyPermissions = async () => {
     const isPermissionUndetermined =
-      existentPermission?.status === ImagePicker.PermissionStatus.UNDETERMINED;
+    existentPermission?.status === ImagePicker.PermissionStatus.UNDETERMINED;
     if (isPermissionUndetermined) {
       const permissionResponse = await requestPermission();
       if (!permissionResponse.granted) {
         console.log('Camera permission not granted');
         return;
       }
-
+      
       return permissionResponse.granted;
     }
-
+    
     const isPermissionDenied =
-      existentPermission?.status === ImagePicker.PermissionStatus.DENIED;
+    existentPermission?.status === ImagePicker.PermissionStatus.DENIED;
     if (isPermissionDenied) {
       Alert.alert(
         'Insufficient Permissions!',
         'You need to grant camera permissions to use this app.'
-      );
-      return false;
-    }
-
-    return true;
-  };
-
-  return (
-    <View
+        );
+        return false;
+      }
+      
+      return true;
+    };
+    
+    return (
+      <View
       style={{
         flex: 1,
         gap: 5,
       }}
-    >
+      >
       <View style={$previewArea}>
         {imagePreview ? (
           <Image
-            source={{ uri: imagePreview }}
-            style={{ width: '100%', height: '100%' }}
+          source={{ uri: imagePreview }}
+          style={{ width: '100%', height: '100%' }}
           />
-        ) : (
+          ) : (
           <Text style={$previewText}>No image taken yet.</Text>
         )}
       </View>
@@ -87,7 +89,12 @@ export const $previewArea: ViewStyle = {
   aspectRatio: 2,
   backgroundColor: AppColors.primary100,
   justifyContent: 'center',
-  overflow: 'hidden'
+  overflow: 'hidden',
 };
 
 export const $previewText: TextStyle = { textAlign: 'center', fontSize: 16 };
+
+
+type ImagePickerProps = {
+  onTakeImage: (uri: string) => void;
+};

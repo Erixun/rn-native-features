@@ -18,19 +18,30 @@ import {
 import { RootScreens } from '../../App';
 import { LatLng as LatLngLong } from 'react-native-maps';
 
+type LocationPickerProps = {
+  alreadyPickedLocation?: LatLngLong;
+  onPickLocation: (location: LatLngLong) => void;
+};
+
 export const LocationPicker = ({
   alreadyPickedLocation,
-}: {
-  alreadyPickedLocation?: LatLngLong;
-}) => {
+  onPickLocation,
+}: LocationPickerProps) => {
   const [pickedLocation, setPickedLocation] = useState<LatLng>();
-  const isFocused = useIsFocused() //???
 
   const getLocationHandler = async () => {
     const hasPermission = await verifyPermissions();
 
-    if (hasPermission)
-      getCurrentPositionAsync().then(toLatLng).then(setPickedLocation);
+    if (hasPermission) {
+      try {
+        const position = await getCurrentPositionAsync();
+        const latLng = toLatLng(position);
+        setPickedLocation(latLng);
+        onPickLocation(position.coords);
+      } catch (err) {
+        Alert.alert('Error', 'Failed to get current position');
+      }
+    }
   };
 
   const verifyPermissions = async () => {
@@ -45,10 +56,12 @@ export const LocationPicker = ({
 
   useEffect(() => {
     const alreadyPickedLocation = route.params?.pickedLocation;
-    if (alreadyPickedLocation)
+    if (alreadyPickedLocation) {
       setPickedLocation(toLatLng({ coords: alreadyPickedLocation }));
-  }, [alreadyPickedLocation]);
-
+      onPickLocation(alreadyPickedLocation);
+    }
+  }, [alreadyPickedLocation, onPickLocation]); // since onPickLocation is called in this useEffect it must be added as a dependency...
+// if onPickLocation is a stable func that does not change betw rerenders, it should be wrapped with a useCallback hook
   function toLatLng({ coords }: { coords: LatLngLong }) {
     return {
       lat: coords.latitude,
