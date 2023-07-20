@@ -1,3 +1,5 @@
+import { LatLng } from "../utils/location";
+
 export class Place {
   title: string;
   imageUri: string;
@@ -18,4 +20,4 @@ export class Place {
   }
 }
 
-type LatLng = { lat: number; lgn: number };
+// type LatLng = { lat: number; lgn: number };

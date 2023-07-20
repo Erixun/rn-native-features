@@ -8,10 +8,11 @@ import { IconButton } from './components/UI/IconButton';
 import { AppColors } from './theme/AppColors';
 import { Map } from './screens/Map';
 import { LatLng } from 'react-native-maps';
+import { Place } from './models/Place';
 
 export type RootScreens = {
   AddPlace: undefined | { pickedLocation: LatLng };
-  AllPlaces: undefined;
+  AllPlaces: undefined | { place: Place };
   Map: undefined;
   PlaceDetails: undefined;
 };

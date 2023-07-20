@@ -1,8 +1,24 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, NavigationProp } from '@react-navigation/native';
 import { PlaceForm } from '../components/Places/PlaceForm';
 import { RootScreens } from '../App';
+import { Place } from '../models/Place';
 
-export const AddPlace = ({route}: {route: RouteProp<RootScreens>}) => {
-  const pickedLocation = route.params?.pickedLocation
-  return <PlaceForm pickedLocation={pickedLocation}/>;
+export const AddPlace = ({ navigation, route }: AddPlaceProps) => {
+  const pickedLocation = route.params?.pickedLocation;
+
+  const createPlaceHandler = (data: Place) => {
+    navigation.navigate('AllPlaces', { place: data });
+  };
+
+  return (
+    <PlaceForm
+      pickedLocation={pickedLocation}
+      onCreatePlace={createPlaceHandler}
+    />
+  );
+};
+
+type AddPlaceProps = {
+  navigation: NavigationProp<RootScreens>;
+  route: RouteProp<RootScreens, 'AddPlace'>;
 };

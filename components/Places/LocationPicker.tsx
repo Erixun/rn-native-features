@@ -7,11 +7,16 @@ import {
   getCurrentPositionAsync,
   requestForegroundPermissionsAsync,
 } from 'expo-location';
-import { LatLng, getMapPreview } from '../../utils/location';
+import {
+  LatLng,
+  getAddress,
+  getMapPreview,
+  toLatLng,
+  toLatLngLong,
+} from '../../utils/location';
 import {
   NavigationProp,
   RouteProp,
-  useIsFocused,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -52,7 +57,7 @@ export const LocationPicker = ({
     return true;
   };
 
-  const route = useRoute<RouteProp<RootScreens>>();
+  const route = useRoute<RouteProp<RootScreens, 'AddPlace'>>();
 
   useEffect(() => {
     const alreadyPickedLocation = route.params?.pickedLocation;
@@ -61,13 +66,22 @@ export const LocationPicker = ({
       onPickLocation(alreadyPickedLocation);
     }
   }, [alreadyPickedLocation, onPickLocation]); // since onPickLocation is called in this useEffect it must be added as a dependency...
-// if onPickLocation is a stable func that does not change betw rerenders, it should be wrapped with a useCallback hook
-  function toLatLng({ coords }: { coords: LatLngLong }) {
-    return {
-      lat: coords.latitude,
-      lng: coords.longitude,
-    };
-  }
+  // if onPickLocation is a stable func that does not change betw rerenders, it should be wrapped with a useCallback hook
+  // function toLatLng({ coords }: { coords: LatLngLong }) {
+  //   return {
+  //     lat: coords.latitude,
+  //     lng: coords.longitude,
+  //   };
+  // }
+
+  // useEffect(() => {
+  //   const handlePickedLocation = async () => {
+  //     if (pickedLocation) {
+  //       const address = await getAddress(pickedLocation);
+  //       onPickLocation(toLatLngLong(pickedLocation));
+  //     }
+  //   };
+  // }, [pickedLocation, onPickLocation]);
 
   const navigation = useNavigation<NavigationProp<RootScreens>>();
 
