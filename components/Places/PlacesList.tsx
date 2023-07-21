@@ -17,6 +17,7 @@ export const PlacesList = ({ places }: { places?: Place[] }) => {
 
   return (
     <FlatList
+      style={$list}
       data={places}
       keyExtractor={(item: Place) => item.id}
       renderItem={toPlaceItem}
@@ -34,3 +35,5 @@ const $fallbackText: TextStyle = {
   fontSize: 16,
   color: AppColors.primary400,
 };
+
+const $list: ViewStyle = {margin: 12};

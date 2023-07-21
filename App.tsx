@@ -1,5 +1,4 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AllPlaces } from './screens/AllPlaces';
@@ -9,6 +8,9 @@ import { AppColors } from './theme/AppColors';
 import { Map } from './screens/Map';
 import { LatLng } from 'react-native-maps';
 import { Place } from './models/Place';
+import { useEffect, useState } from 'react';
+import { initDb } from './data/db';
+import { ActivityIndicator } from 'react-native';
 
 export type RootScreens = {
   AddPlace: undefined | { pickedLocation: LatLng };
@@ -20,6 +22,14 @@ export type RootScreens = {
 const RootStack = createNativeStackNavigator<RootScreens>();
 
 export default function App() {
+  const [hasDbInitialized, setHasDbInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!hasDbInitialized) initDb().then(setHasDbInitialized);
+  });
+
+  if (!hasDbInitialized) return <ActivityIndicator size="large" />;
+
   return (
     <>
       <StatusBar style="dark" />
