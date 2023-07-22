@@ -19,7 +19,7 @@ export const PlacesList = ({ places }: { places?: Place[] }) => {
     <FlatList
       style={$list}
       data={places}
-      keyExtractor={(item: Place) => item.id}
+      keyExtractor={(item: Place) => item.id!}
       renderItem={toPlaceItem}
     />
   );

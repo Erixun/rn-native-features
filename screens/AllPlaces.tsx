@@ -3,7 +3,7 @@ import { PlacesList } from '../components/Places/PlacesList';
 import { RootScreens } from '../App';
 import { useEffect, useState } from 'react';
 import { Place } from '../models/Place';
-import { db, insertData, retrieveData } from '../data/db';
+import { retrievePlaces } from '../data/db';
 
 export const AllPlaces = ({
   route,
@@ -15,19 +15,19 @@ export const AllPlaces = ({
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (!hasRetrieved) {
-      retrieveData()
+    // if (!hasRetrieved) {
+    // }
+    if (isFocused) {
+      retrievePlaces()
         .then(setLoadedPlaces)
-        .then(() => {
-          setHasRetrieved(true);
-        });
-    }
-    if (isFocused && route.params) {
-      const place = route.params.place;
-      setLoadedPlaces((currentPlaces) =>
-        currentPlaces ? [...Array.from(currentPlaces), place] : [place]
-      );
-      insertData(place);
+        // .then(() => {
+        //   setHasRetrieved(true);
+        // });
+      // const place = route.params.place;
+      // setLoadedPlaces((currentPlaces) =>
+      //   currentPlaces ? [...Array.from(currentPlaces), place] : [place]
+      // );
+      // insertData(place);
     }
   }, [isFocused, route, hasRetrieved]);
 

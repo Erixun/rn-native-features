@@ -1,6 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import { Place } from '../models/Place';
 import { ResultSet, ResultSetError } from 'expo-sqlite';
+import { LatLng } from '../utils/location';
 
 export const db = SQLite.openDatabase('places.db'); //will be created for us if it does not exist
 
@@ -34,8 +35,8 @@ export const initDb = async () => {
   }
 };
 
-export const insertData = (data: Place) => {
-  const { title, imageUri, address, location } = data;
+export const insertPlace = async (input: Place) => {
+  const { title, imageUri, address, location } = input;
   db.transactionAsync(async (tx) => {
     tx.executeSqlAsync(
       'INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)',
@@ -52,20 +53,39 @@ export const insertData = (data: Place) => {
   });
 };
 
-export const retrieveData = async () => {
-  let data = new Array<Place>();
+export const retrievePlaces = async () => {
+  let output = new Array<Place>();
   await db.transactionAsync(async (tx) => {
     tx.executeSqlAsync('SELECT * FROM places', [])
       .then((results) => {
         checkErr(results);
         console.log('Successfully retrieved places', results);
-        data = results.rows as Place[];
+        output = results.rows as Place[];
       })
       .catch((err) => {
         console.log('Failed to retrieve places data');
       });
   });
-  return data;
+  return output;
+};
+
+export const getPlaceDetails = async (id: string) => {
+  let output: Place | undefined;
+  await db.transactionAsync(async (tx) => {
+    tx.executeSqlAsync(`SELECT * FROM places WHERE id = ?`, [id])
+      .then((results) => {
+        checkErr(results);
+        const { lat, lng, address, title, id, imageUri } = results
+          .rows[0] as Omit<Place, 'location'> & LatLng;
+        const location = { lat, lng };
+        output = new Place(title, imageUri, address, location, id);
+      })
+      .catch((err) => {
+        console.log(`Failed to retrieve details for place with id`, id);
+      });
+  });
+
+  return output;
 };
 
 const checkErr = (results: Partial<ResultSet & ResultSetError>) => {

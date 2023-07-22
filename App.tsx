@@ -11,12 +11,13 @@ import { Place } from './models/Place';
 import { useEffect, useState } from 'react';
 import { initDb } from './data/db';
 import { ActivityIndicator } from 'react-native';
+import { PlaceDetails } from './screens/PlaceDetails';
 
 export type RootScreens = {
   AddPlace: undefined | { pickedLocation: LatLng };
   AllPlaces: undefined | { place: Place };
-  Map: undefined;
-  PlaceDetails: undefined;
+  Map: undefined | { latLng: LatLng };
+  PlaceDetails: undefined | { placeId: string };
 };
 
 const RootStack = createNativeStackNavigator<RootScreens>();
@@ -72,6 +73,11 @@ export default function App() {
             options={{ title: 'Add your place' }}
           />
           <RootStack.Screen name="Map" component={Map} />
+          <RootStack.Screen
+            name="PlaceDetails"
+            options={{ title: 'Loading Place Details...' }}
+            component={PlaceDetails}
+          />
         </RootStack.Navigator>
       </NavigationContainer>
     </>

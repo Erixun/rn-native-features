@@ -9,17 +9,28 @@ import {
 } from 'react-native';
 import { Place } from '../../models/Place';
 import { AppColors } from '../../theme/AppColors';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootScreens } from '../../App';
+import { getPlaceDetails } from '../../data/db';
 
 export const PlaceItem = ({ place }: PlaceItemProps) => {
+  const navigation = useNavigation<NavigationProp<RootScreens>>();
+
+  const goToPlaceDetails = async () => {
+    // const plc = getPlaceDetails(place.id)
+    navigation.navigate('PlaceDetails', { placeId: place.id! });
+  };
   return (
     <Pressable
-      style={({pressed}) => [$item, pressed && $pressed]}
-      onPress={() => console.log('PlaceItem press not implemented yet')}
+      style={({ pressed }) => [$item, pressed && $pressed]}
+      onPress={goToPlaceDetails}
     >
       <Image style={$image} source={{ uri: place.imageUri }} />
       <View style={$textContainer}>
         <Text style={$title}>{place.title}</Text>
-        <Text style={$address} numberOfLines={3}>at {place.address}</Text>
+        <Text style={$address} numberOfLines={3}>
+          at {place.address}
+        </Text>
       </View>
     </Pressable>
   );
@@ -37,12 +48,12 @@ const $item: ViewStyle = {
   shadowOffset: { width: 1, height: 1 },
   shadowRadius: 2,
   borderRadius: 4,
-  overflow: 'hidden'
+  overflow: 'hidden',
 };
 
 const $pressed: ViewStyle = {
-  opacity: 0.9
-}
+  opacity: 0.9,
+};
 
 const $image: ImageStyle = {
   height: '100%',
@@ -54,18 +65,18 @@ const $textContainer: ViewStyle = {
   alignItems: 'flex-start',
   maxWidth: '100%',
   padding: 15,
-  flex: 1
+  flex: 1,
 };
 
 const $title: TextStyle = {
   fontSize: 20,
   fontWeight: 'bold',
-  marginBottom: 4
-}
+  marginBottom: 4,
+};
 
 const $address: TextStyle = {
   fontSize: 15,
-}
+};
 
 type PlaceItemProps = {
   place: Place;
