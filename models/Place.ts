@@ -1,4 +1,4 @@
-import { LatLng } from "../utils/location";
+import { LatLng } from '../utils/location';
 
 export class Place {
   title: string;
@@ -17,8 +17,6 @@ export class Place {
     this.imageUri = imageUri;
     this.address = address;
     this.location = location;
-    this.id = id//new Date().toString() + Math.random().toString();
+    this.id = id;
   }
 }
-
-// type LatLng = { lat: number; lgn: number };

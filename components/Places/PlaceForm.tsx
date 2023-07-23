@@ -25,7 +25,6 @@ export const PlaceForm = ({
   const [enteredTitle, setEnteredTitle] = useState<string>();
   const [formImage, setFormImage] = useState<string>();
   const [formLocation, setFormLocation] = useState<LocationAddress>();
-  // const [address, setAddress] = useState<string>();
 
   const changeTitleHandler = (enteredText: string) => {
     setEnteredTitle(enteredText);
@@ -36,6 +35,8 @@ export const PlaceForm = ({
   };
 
   const pickLocationHandler = useCallback(async (location: LatLngLong) => {
+    // useCallback ensures that the func isnt recreated unecessarily when passed as prop
+    // otherwise this func will be reacreated whenever this (PlaceForm) component is rerendered.
     const latLng = toLatLng({ coords: location });
     try {
       const address = await getAddress(latLng);
@@ -43,14 +44,8 @@ export const PlaceForm = ({
     } catch (error) {
       console.log(error);
     }
-    // setAddress(address);
-  }, []); //useCallback ensures that the func isnt recreated unecessarily when passed as prop
-  //otherwise this func will be reacreated whenever this (PlaceForm) component is rerendered.
+  }, []); 
   const savePlaceHandler = () => {
-    // console.log('Form content:');
-    // console.log(enteredTitle);
-    // console.log(formImage);
-    // console.log(formLocation);
     if (!(enteredTitle && formImage && formLocation)) return;
     
     const { address, ...location } = formLocation;

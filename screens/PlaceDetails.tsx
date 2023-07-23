@@ -46,9 +46,6 @@ export const PlaceDetails = ({ route, navigation }: PlaceDetailsProps) => {
         source={{ uri: place.imageUri }}
       />
       <View style={{ paddingHorizontal: 15, gap: 5 }}>
-        {/* <Text style={{ color: AppColors.primary100, fontSize: 20 }}>
-          {place.title}
-        </Text> */}
         <Text
           style={{
             color: AppColors.primary100,

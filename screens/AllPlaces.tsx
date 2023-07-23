@@ -5,31 +5,17 @@ import { useEffect, useState } from 'react';
 import { Place } from '../models/Place';
 import { retrievePlaces } from '../data/db';
 
-export const AllPlaces = ({
-  route,
-}: {
-  route: RouteProp<RootScreens, 'AllPlaces'>;
-}) => {
+export const AllPlaces = ({ route }: AllPlacesProps) => {
   const [loadedPlaces, setLoadedPlaces] = useState<Place[]>();
-  const [hasRetrieved, setHasRetrieved] = useState(false);
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    // if (!hasRetrieved) {
-    // }
-    if (isFocused) {
-      retrievePlaces()
-        .then(setLoadedPlaces)
-        // .then(() => {
-        //   setHasRetrieved(true);
-        // });
-      // const place = route.params.place;
-      // setLoadedPlaces((currentPlaces) =>
-      //   currentPlaces ? [...Array.from(currentPlaces), place] : [place]
-      // );
-      // insertData(place);
-    }
-  }, [isFocused, route, hasRetrieved]);
+    if (isFocused) retrievePlaces().then(setLoadedPlaces);
+  }, [isFocused, route]);
 
   return <PlacesList places={loadedPlaces} />;
+};
+
+type AllPlacesProps = {
+  route: RouteProp<RootScreens, 'AllPlaces'>;
 };

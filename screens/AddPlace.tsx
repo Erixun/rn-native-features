@@ -9,8 +9,7 @@ export const AddPlace = ({ navigation, route }: AddPlaceProps) => {
 
   const createPlaceHandler = async (data: Place) => {
     await insertPlace(data);
-
-    navigation.navigate('AllPlaces'); //, { place: data });
+    navigation.navigate('AllPlaces');
   };
 
   return (

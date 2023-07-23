@@ -11,13 +11,11 @@ import { Place } from '../../models/Place';
 import { AppColors } from '../../theme/AppColors';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootScreens } from '../../App';
-import { getPlaceDetails } from '../../data/db';
 
 export const PlaceItem = ({ place }: PlaceItemProps) => {
   const navigation = useNavigation<NavigationProp<RootScreens>>();
 
   const goToPlaceDetails = async () => {
-    // const plc = getPlaceDetails(place.id)
     navigation.navigate('PlaceDetails', { placeId: place.id! });
   };
   return (
@@ -41,7 +39,6 @@ const $item: ViewStyle = {
   backgroundColor: AppColors.primary100,
   margin: 3,
   flexDirection: 'row',
-  // gap: 8,
   elevation: 3,
   shadowColor: '#000000',
   shadowOpacity: 0.15,

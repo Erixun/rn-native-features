@@ -16,14 +16,12 @@ export const ImagePickerElement = ({ onTakeImage }: ImagePickerProps) => {
     try {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        // allowsEditing: true,
         aspect: [16, 9],
         quality: 0.5,
       });
       console.log(result);
       
       if (!result.canceled) {
-        // console.log(result.assets);
         const { uri } = result.assets[0];
         setImage(uri);
         onTakeImage(uri);
